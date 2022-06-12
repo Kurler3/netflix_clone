@@ -1,11 +1,35 @@
-import React, {memo} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {BellIcon, SearchIcon} from '@heroicons/react/solid';
 import Link from 'next/link';
 
 
 const Header = () => {
+
+  // IS SCROLLING STATE OBJECT
+  const [state, setState] = useState({
+    isScroll: false,
+  });
+
+  const handleScroll = useCallback(() => {
+    // ANY KIND OF VERTICAL SCROLL FROM TOP 
+    setState(() => {
+      return {
+        isScroll: window.scrollY > 0,
+      }
+    })
+  }, []);
+
+  // HANDLE SCROLL FUNCTION AND CLEANUP
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
   return (
-    <header> 
+    <header className={`${state.isScroll === true && "bg-[#141414]"}`}> 
         {/* LEFT SIDE */}
         <div className='flex items-center space-x-2 md:space-x-10'>
             <img 
